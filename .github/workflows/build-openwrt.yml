@@ -24,9 +24,9 @@ on:
 #    types: [started]
 
 # 编辑触发
-#  push:
-#    branches: 
-#      - main
+  push:
+    branches: 
+      - main
 
 # config触发
 #  paths:
