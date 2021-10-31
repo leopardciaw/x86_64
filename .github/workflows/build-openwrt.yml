@@ -16,8 +16,8 @@ on:
   schedule:
     - cron: 0 16 * * *
 # release触发
-  release:
-    types: [published]
+#  release:
+#    types: [published]
 
 # 点赞触发
 #  watch:
@@ -25,8 +25,8 @@ on:
 
 # 编辑触发
   push:
-    branches: 
-      - main
+    branches:
+      - master
 
 # config触发
 #  paths:
