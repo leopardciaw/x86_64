@@ -29,8 +29,8 @@ on:
       - main
 
 # config触发
-  status:
-    - 'open.config'
+#  paths:
+#    - 'open.config'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
