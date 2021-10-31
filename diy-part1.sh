@@ -34,7 +34,7 @@ git clone https://github.com/kenzok8/small.git package/small
 # git clone https://github.com/immortalwrt/luci-app-unblockneteasemusic.git package/luci-app-unblockneteasemusic
 
 # CONFIG_PACKAGE_luci-app-filebrowser=y
-git clone https://github.com/immortalwrt/openwrt-filebrowser.git package/luci-app-filebrowser
+# git clone https://github.com/immortalwrt/openwrt-filebrowser.git package/luci-app-filebrowser
 
 # luci-app-dnspod
-git clone https://github.com/leopardciaw/mypackage2.git package/diy-packages
+git clone https://github.com/leopardciaw/mypackage2.git package/luci-app-dnspod
