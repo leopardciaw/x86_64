@@ -15,7 +15,6 @@ on:
 # 定时触发
   schedule:
     - cron: 0 16 * * *
-
 # release触发
   release:
     types: [published]
@@ -25,13 +24,13 @@ on:
 #    types: [started]
 
 # 编辑触发
-#  push:
-#    branches: 
-#      - main
+  push:
+    branches: 
+      - main
 
 # config触发
 #  paths:
-#    - '.config'
+#    - 'open.config'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
