@@ -11,13 +11,14 @@
 name: Build OpenWrt J4125_x86_64
 
 on:
+  repository_dispatch:
 # 定时触发
   schedule:
-    - cron: 10 15 * * *
+    - cron: 0 16 * * *
 
 # release触发
-#  release:
-#    types: [published]
+  release:
+    types: [published]
 
 # 点赞触发
 #  watch:
