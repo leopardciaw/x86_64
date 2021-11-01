@@ -14,7 +14,7 @@ on:
   repository_dispatch:
 # 定时触发
   schedule:
-    - cron: 30 16 * * *
+    - cron: 30 17 * * *
 # release触发
 #  release:
 #    types: [published]
