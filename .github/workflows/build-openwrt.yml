@@ -102,7 +102,7 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: 开启SSH远程连接
-      uses: P3TERX/debugger-action@main
+      uses: P3TERX/ssh2actions@v1.0.0
       if: env.SSH_ACTIONS == 'true'
 
     - name: Download package
