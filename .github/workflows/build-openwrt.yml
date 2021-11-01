@@ -24,9 +24,9 @@ on:
 #    types: [started]
 
 # 编辑触发
-  push:
-    branches:
-      - master
+#  push:
+#    branches:
+#      - master
 
 # config触发
 #  paths:
@@ -39,7 +39,7 @@ env:
   CONFIG_FILE: open.config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
-  SSH_ACTIONS: true        # SSH 连接 Actions 功能
+  SSH_ACTIONS: false        # SSH 连接 Actions 功能
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: true
@@ -193,7 +193,7 @@ jobs:
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
       with:
-        retain_days: 1
+        retain_days: 10
         keep_minimum_runs: 3
 
     - name: Remove old Releases
