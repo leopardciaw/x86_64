@@ -168,13 +168,11 @@ jobs:
         -name "*combined*" \
         -or -name "*sysupgrade*" \
         -or -name "sha256sums" \
-        -or -name "generic" \
         | xargs -i mv -f {} ./firmware/
         cp openwrt/.config  ./firmware/${{matrix.target}}.config
         cd firmware
         echo ${{ env.date4 }} > version.txt
         mv sha256sums ${{matrix.target}}_sha256sums
-        mv generic ${{matrix.target}}_generic
         rename -v "s/^openwrt/${{ env.date3 }}-Lean/" *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
