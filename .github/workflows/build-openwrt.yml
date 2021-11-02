@@ -31,9 +31,9 @@ on:
 #    types: [started]
 
 # 编辑触发
-#  push:
-#    branches:
-#      - master
+  push:
+    branches:
+      - master
 
 # config触发
 #  paths:
@@ -43,7 +43,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: open.config
+  CONFIG_FILE: vm.config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: true
@@ -168,14 +168,12 @@ jobs:
         -name "*combined*" \
         -or -name "*sysupgrade*" \
         -or -name "sha256sums" \
-        -or -name "config" \
         -or -name "generic" \
         | xargs -i mv -f {} ./firmware/
         cp openwrt/.config  ./firmware/${{matrix.target}}.config
         cd firmware
         echo ${{ env.date4 }} > version.txt
         mv sha256sums ${{matrix.target}}_sha256sums
-        mv config ${{matrix.target}}_config
         mv generic ${{matrix.target}}_generic
         rename -v "s/^openwrt/${{ env.date3 }}-Lean/" *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
