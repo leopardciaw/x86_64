@@ -21,7 +21,7 @@ on:
 
 # 定时触发
   schedule:
-    - cron: 30 17 * * *
+    - cron: 20 8 * * *
 # release触发
 #  release:
 #    types: [published]
@@ -31,9 +31,9 @@ on:
 #    types: [started]
 
 # 编辑触发
-  push:
-    branches:
-      - master
+#  push:
+#    branches:
+#      - master
 
 # config触发
 #  paths:
