@@ -21,7 +21,7 @@ on:
 
 # 定时触发
   schedule:
-    - cron: 10 9 * * *
+    - cron: 50 13 * * *
 # release触发
 #  release:
 #    types: [published]
@@ -43,7 +43,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: 4125.config
+  CONFIG_FILE: jj.config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: true
