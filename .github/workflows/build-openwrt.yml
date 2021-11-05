@@ -21,7 +21,7 @@ on:
 
 # 定时触发
   schedule:
-    - cron: 0 2 * * *
+    - cron: 50 6 * * *
 # release触发
 #  release:
 #    types: [published]
@@ -164,17 +164,8 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        mkdir firmware
-        mv -f openwrt/bin/targets/*/*/{*combined*,*sysupgrade*} ./firmware/ 2>/dev/null || true
-        cp openwrt/.config  ./firmware/${{matrix.target}}.config
-        cp openwrt/build_dir/target-*/linux-*/linux-*/.config ./firmware/${{matrix.target}}_kernel.config
-        cd firmware
-        echo "${{ env.VERSION }}.${{ env.date4 }}" > version.txt
-        rename -v "s/^openwrt/${{ env.VERSION }}${{ env.date3 }}-Lean/" *
-        rename -v "s/friendlyarm_//" *gz
-        md5=$((md5sum *squashfs-sysupgrade* || md5sum *squashfs-combined-efi*) | awk '{print $1}') 2>/dev/null
-        echo $md5 >> version.txt
-        echo $REPO_BRANCH >> version.txt
+        cd openwrt/bin/targets/*/*
+        rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
