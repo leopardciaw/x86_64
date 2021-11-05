@@ -31,9 +31,9 @@ on:
 #    types: [started]
 
 # 编辑触发
-#  push:
-#    branches:
-#      - master
+  push:
+    branches:
+      - master
 
 # config触发
 #  paths:
@@ -43,7 +43,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: jj.config
+  CONFIG_FILE: wrt.config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: true
