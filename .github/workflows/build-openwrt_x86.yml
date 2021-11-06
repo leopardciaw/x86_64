@@ -19,13 +19,13 @@ on:
         required: false
         default: 'false'
   schedule:
-    - cron: 10 1 * * *
+    - cron: 10 20 * * *
 #  watch:
 #    types: started
 # 编辑触发
-  push:
-    branches:
-      - master
+#  push:
+#    branches:
+#      - master
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
