@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build OpenWrt J4125_x86_64
+name: Build OpenWrt_x86_64
 
 on:
   repository_dispatch:
@@ -19,13 +19,13 @@ on:
         required: false
         default: 'false'
   schedule:
-    - cron: 30 13 * * *
+    - cron: 10 1 * * *
 #  watch:
 #    types: started
 # 编辑触发
-#  push:
-#    branches:
-#      - master
+  push:
+    branches:
+      - master
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
