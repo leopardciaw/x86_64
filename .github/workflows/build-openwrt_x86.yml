@@ -18,14 +18,14 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-  schedule:
-    - cron: 0 19 * * *
+#  schedule:
+#    - cron: 0 19 * * *
 #  watch:
 #    types: started
 # 编辑触发
-#  push:
-#    branches:
-#      - master
+  push:
+    branches:
+      - master
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
