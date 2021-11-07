@@ -37,4 +37,4 @@ git clone https://github.com/kenzok8/small.git package/small
 # git clone https://github.com/immortalwrt/openwrt-filebrowser.git package/luci-app-filebrowser
 
 # luci-app-dnspod
-git clone https://github.com/leopardciaw/mypackage2.git package/mypackage2
+# git clone https://github.com/leopardciaw/mypackage2.git package/mypackage2
