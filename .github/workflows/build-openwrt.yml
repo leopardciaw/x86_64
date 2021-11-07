@@ -8,7 +8,36 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build OpenWrt
+name: Build OpenWrt J4125_x86_64
+
+on:
+  repository_dispatch:
+    workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+
+# 定时触发
+  schedule:
+    - cron: 55 15 * * *
+# release触发
+#  release:
+#    types: [published]
+
+# 编辑触发
+  push:
+    branches:
+      - master
+
+# 点赞触发
+#  watch:
+#    types: [started]
+
+# config触发
+#  paths:
+#    - 'open.config'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -17,33 +46,22 @@ env:
   CONFIG_FILE: wrt.config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
-  UPLOAD_BIN_DIR: true
+  UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
-  UPLOAD_COWTRANSFER: true
-  UPLOAD_WETRANSFER: true
+  UPLOAD_COWTRANSFER: false
+  UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
-
-on:
-  repository_dispatch:
-  workflow_dispatch:
-    inputs:
-      ssh:
-        description: 'SSH connection to Actions'
-        required: false
-        default: 'false'
-
-  schedule:
-    - cron: 10 19 * * *
-
-# 编辑触发
-#  push:
-#    branches:
-#      - master
 
 jobs:
   build:
     runs-on: ubuntu-20.04
+
+    name: Build ${{matrix.target}}
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ["${{ github.event.client_payload.target }}"]
 
     steps:
     - name: Checkout
@@ -55,12 +73,20 @@ jobs:
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
+        sudo -E apt-get -qq install build-essential cmake asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libreadline-dev libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint ccache curl wget vim nano python2.7 python3 python3-pip python3-ply haveged lrzsz device-tree-compiler scons antlr3 gperf intltool mkisofs rsync
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
+
+    - name: current date
+      id: date
+      run: |
+        echo "date=$(date +'%m/%d_%Y_%H/%M')" >> $GITHUB_ENV
+        echo "date2=$(date +'%Y.%m.%d-%H%M')" >> $GITHUB_ENV
+        echo "date3=$(date +'%m.%d')" >> $GITHUB_ENV
+        echo "date4=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
 
     - name: Clone source code
       working-directory: /workdir
@@ -68,6 +94,12 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
+    - name: Cache
+      uses: klever1988/cachewrtbuild@main
+      with:
+        ccache: 'true'
+        prefix: ${{ github.workspace }}/openwrt
 
     - name: Load custom feeds
       run: |
@@ -91,7 +123,7 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
     - name: SSH connection to Actions
-      uses: P3TERX/ssh2actions@v1.0.0
+      uses: kenzok78/debugger-action@master
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -123,25 +155,29 @@ jobs:
 
     - name: Upload bin directory
       uses: actions/upload-artifact@main
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
+      if: steps.compile.outputs.status == 'success' && !cancelled()
       with:
-        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: openwrt/bin
+        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.date3 }} _Lean
+        path: ${{ env.FIRMWARE }}
 
     - name: Organize files
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd openwrt/bin/targets/*/*
-        rm -rf packages
-        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+        rm -rf ./artifact
+        ls openwrt/bin/targets/x86/64/
+        mv openwrt/bin/targets/x86/64 ./artifact
+        pushd artifact
+        cat config.buildinfo
+        rm -rf packages *.bin *.buildinfo *.manifest *rootfs* *-vmlinuz sha256sums
+        popd
         echo "::set-output name=status::success"
 
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.date3 }}
         path: ${{ env.FIRMWARE }}
 
     - name: Upload firmware to cowtransfer
@@ -178,9 +214,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.LEO_TOKEN }}
       with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
+        files: "${{ env.FIRMWARE }}/*"
+        name: ${{ env.date2 }} ${{matrix.target}}
+        tag_name: ${{ env.date3 }}_${{matrix.target}}
         body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
@@ -192,7 +229,7 @@ jobs:
       uses: dev-drprasad/delete-older-releases@v0.1.0
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        keep_latest: 10
+        keep_latest: 5
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.LEO_TOKEN }}
