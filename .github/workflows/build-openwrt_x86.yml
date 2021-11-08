@@ -21,7 +21,7 @@ on:
 
 # 定时触发
   schedule:
-    - cron: 45 0 * * *
+    - cron: 0 10 * * *
 # release触发
 #  release:
 #    types: [published]
@@ -158,13 +158,13 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        rm -rf ./artifact
-        ls openwrt/bin/targets/x86/64/
-        mv openwrt/bin/targets/x86/64 ./artifact
-        pushd artifact
-        cat config.buildinfo
-        rm -rf packages *.bin *.buildinfo *.manifest *rootfs* *-vmlinuz sha256sums
-        popd
+        cd openwrt/bin/targets/x86/64/
+        rm -rf packages
+        rm -rf *.bin
+        rm -rf feeds*
+        rm -rf *version*
+        rm -rf *.manifest
+        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
     - name: Upload firmware directory
