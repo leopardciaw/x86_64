@@ -21,7 +21,7 @@ on:
 
 # 定时触发
   schedule:
-    - cron: 55 14 * * *
+    - cron: 45 0 * * *
 # release触发
 #  release:
 #    types: [published]
@@ -95,12 +95,6 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-    - name: Cache
-      uses: klever1988/cachewrtbuild@main
-      with:
-        ccache: 'true'
-        prefix: ${{ github.workspace }}/openwrt
-
     - name: Load custom feeds
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
@@ -155,10 +149,10 @@ jobs:
 
     - name: Upload bin directory
       uses: actions/upload-artifact@main
-      if: steps.compile.outputs.status == 'success' && !cancelled()
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true' && !cancelled()
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.date3 }} _Lean
-        path: ${{ env.FIRMWARE }}
+        path: openwrt/bin
 
     - name: Organize files
       id: organize
