@@ -21,7 +21,7 @@ on:
 
 # 定时触发
   schedule:
-    - cron: 45 12 * * *
+    - cron: 20 17 * * *
 # release触发
 #  release:
 #    types: [published]
@@ -151,7 +151,6 @@ jobs:
         rm -rf *version*
         rm -rf *rootfs*
         rm -rf *.manifest
-        rename -v "s/^openwrt/$(date +"%Y%m%d%H%M")-openwrt/" *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
