@@ -21,7 +21,7 @@ on:
 
 # 定时触发
   schedule:
-    - cron: 0 9 * * *
+    - cron: 40 15 * * *
 # release触发
 #  release:
 #    types: [published]
