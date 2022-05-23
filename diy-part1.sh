@@ -24,7 +24,8 @@ echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.defau
 # git clone https://github.com/xiaorouji/openwrt-package/tree/master/lienol/luci-app-passwall package/luci-app-passwall
 git clone https://github.com/kenzok8/openwrt-packages.git package/diy-packages
 git clone https://github.com/kenzok8/small.git package/small
-
+git clone https://github.com/kiddin9/luci-app-dnsfilter.git package/luci-app-dnsfilter
+git clone https://github.com/leopardciaw/mypackage2.git package/mypackage2
 
 # 增加ssr
 # git clone https://github.com/kenzok8/openwrt-packages.git package/openwrt-packages
@@ -36,5 +37,5 @@ git clone https://github.com/kenzok8/small.git package/small
 # CONFIG_PACKAGE_luci-app-filebrowser=y
 # git clone https://github.com/immortalwrt/openwrt-filebrowser.git package/luci-app-filebrowser
 
-# luci-app-dnspod
+# luci-app-poweroff关闭路由器
 git clone https://github.com/esirplayground/luci-app-poweroff.git package/luci-app-poweroff
